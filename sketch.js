@@ -2,8 +2,7 @@ let birdXPos = 40;
 let birdYPos = 250;
 
 
-// T = Top, B = Bottom; 1 through 4 corresponds to column 
-
+// T = Top, B = Bottom; 1 through 4 corresponds to column
 //    PIPE MAP
 //    T1 T2 T3 T4
 //    B1 B2 B3 B4
@@ -34,75 +33,69 @@ let pipeB4YPos = 250;
 
 
 // Variable to check if the game is running
-let gameRunning = true; 
+let gameRunning = true;
 
 
+// Button position and size
+let buttonX = 200;
+let buttonY = 300;
+let buttonWidth = 100;
+let buttonHeight = 50;
 
 
-// #################################################################################################################################
-function preload() {
-
-}
-
-
-
+// Score variable
+let score = 0;
+function preload() {}
 function setup() {
     createCanvas(500, 500);
     noStroke();
 }
 
 
-
 function draw() {
     background(0);
-
     if (gameRunning) {
-// Draw bird
+        // Draw bird
         fill(255, 255, 0);
         ellipse(birdXPos, birdYPos, 50, 50);
 
 
-// Draw pipes
+        // Draw pipes
         fill(0, 255, 0);
         rect(pipeT1XPos, pipeT1YPos, 50, 175);
         rect(pipeB1XPos, pipeB1YPos, 50, 175);
-
         rect(pipeT2XPos, pipeT2YPos, 50, 100);
         rect(pipeB2XPos, pipeB2YPos, 50, 250);
-
         rect(pipeT3XPos, pipeT3YPos, 50, 250);
         rect(pipeB3XPos, pipeB3YPos, 50, 100);
-
         rect(pipeT4XPos, pipeT4YPos, 50, 100);
         rect(pipeB4XPos, pipeB4YPos, 50, 250);
 
 
-// Move pipes towards bird
+        // Move pipes towards bird
         pipeT1XPos -= 2;
         pipeB1XPos -= 2;
-
         pipeT2XPos -= 2;
         pipeB2XPos -= 2;
-
         pipeT3XPos -= 2;
         pipeB3XPos -= 2;
-
         pipeT4XPos -= 2;
         pipeB4XPos -= 2;
 
 
-// Moves bird down
+        // Moves bird down
         birdYPos += 3;
 
 
-// Check if spacebar is pressed to move bird up
+        // Check if spacebar is pressed to move bird up
         if (keyIsDown(32)) { // 32 is the keycode for the spacebar
             birdYPos -= 9; // Move the bird up by 9 units
         }
 
-// Check if pipes are off screen to respawn at other side 
+        // Check if pipes are off screen to respawn at other side
         if (pipeT1XPos <= -50) {
             pipeT1XPos = 650;
+            score++; // Increase score when pipe is successfully passed
         }
 
         if (pipeB1XPos <= -50) {
@@ -111,6 +104,7 @@ function draw() {
 
         if (pipeT2XPos <= -50) {
             pipeT2XPos = 650;
+            score++; // Increase score when pipe is successfully passed
         }
 
         if (pipeB2XPos <= -50) {
@@ -119,6 +113,7 @@ function draw() {
 
         if (pipeT3XPos <= -50) {
             pipeT3XPos = 650;
+            score++; // Increase score when pipe is successfully passed
         }
 
         if (pipeB3XPos <= -50) {
@@ -127,17 +122,23 @@ function draw() {
 
         if (pipeT4XPos <= -50) {
             pipeT4XPos = 650;
+            score++; // Increase score when pipe is successfully passed
         }
 
         if (pipeB4XPos <= -50) {
             pipeB4XPos = 650;
         }
 
-
-// Check for collisions
+        // Check for collisions
         if (checkCollision()) {
             gameRunning = false;
         }
+
+        // Display score
+        fill(255);
+        textSize(32);
+        textAlign(LEFT, TOP);
+        text("Score: " + score, 10, 10);
 
 
     } else {
@@ -146,8 +147,59 @@ function draw() {
         textSize(50);
         textAlign(CENTER, CENTER);
         text("GAME OVER", width / 2, height / 2);
-    }
 
+        // Draw "Play Again" button
+        fill(255);
+        rect(buttonX, buttonY, buttonWidth, buttonHeight);
+        fill(0);
+        textSize(20);
+        textAlign(CENTER, CENTER);
+        text("Play Again", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
+    }
+}
+
+
+// Mouse pressed event to check if the button is clicked
+function mousePressed() {
+    if (!gameRunning) {
+        if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
+            restartGame();
+        }
+    }
+}
+
+
+// Restart the game by resetting variables
+    function restartGame() {
+        birdXPos = 40;
+        birdYPos = 250;
+
+        pipeT1XPos = 125;
+        pipeT1YPos = 0;
+
+        pipeB1XPos = 125;
+        pipeB1YPos = 325;
+
+        pipeT2XPos = 300;
+        pipeT2YPos = 0;
+
+        pipeB2XPos = 300;
+        pipeB2YPos = 250;
+
+        pipeT3XPos = 475;
+        pipeT3YPos = 0;
+
+        pipeB3XPos = 475;
+        pipeB3YPos = 400;
+
+        pipeT4XPos = 650;
+        pipeT4YPos = 0;
+
+        pipeB4XPos = 650;
+        pipeB4YPos = 250;
+
+            score = 0; // Reset score
+            gameRunning = true;
 }
 
 
@@ -162,9 +214,7 @@ function keyPressed() {
 // Function to check for collisions
 function checkCollision() {
     let birdRadius = 25; // Half of the diameter of the bird
-
-
-// Check collision with all pipes
+    // Check collision with all pipes
     if (circleRectColliding(birdXPos, birdYPos, birdRadius, pipeT1XPos, pipeT1YPos, 50, 175) ||
         circleRectColliding(birdXPos, birdYPos, birdRadius, pipeB1XPos, pipeB1YPos, 50, 175) ||
         circleRectColliding(birdXPos, birdYPos, birdRadius, pipeT2XPos, pipeT2YPos, 50, 100) ||
@@ -175,7 +225,6 @@ function checkCollision() {
         circleRectColliding(birdXPos, birdYPos, birdRadius, pipeB4XPos, pipeB4YPos, 50, 250)) {
         return true;
     }
-
     return false;
 }
 
@@ -184,14 +233,10 @@ function checkCollision() {
 function circleRectColliding(cx, cy, radius, rx, ry, rw, rh) {
     let testX = cx;
     let testY = cy;
-
     if (cx < rx) testX = rx;
     else if (cx > rx + rw) testX = rx + rw;
-
     if (cy < ry) testY = ry;
     else if (cy > ry + rh) testY = ry + rh;
-
     let distance = dist(cx, cy, testX, testY);
-
     return distance <= radius;
 }
