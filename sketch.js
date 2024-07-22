@@ -1,5 +1,3 @@
-// LEVEL 2
-
 let birdXPos = 40; 
 let birdYPos = 250;
 
@@ -59,12 +57,12 @@ function draw() {
     background(0);
 
     if (gameRunning) {
-        // Draw bird
+// Draw bird
         fill(255, 255, 0);
         ellipse(birdXPos, birdYPos, 50, 50);
 
 
-        // Draw pipes
+// Draw pipes
         fill(0, 255, 0);
         rect(pipeT1XPos, pipeT1YPos, 50, 175);
         rect(pipeB1XPos, pipeB1YPos, 50, 175);
@@ -79,7 +77,7 @@ function draw() {
         rect(pipeB4XPos, pipeB4YPos, 50, 250);
 
 
-        // Move pipes towards bird
+// Move pipes towards bird
         pipeT1XPos -= 2;
         pipeB1XPos -= 2;
 
@@ -93,16 +91,16 @@ function draw() {
         pipeB4XPos -= 2;
 
 
-        // Moves bird down
+// Moves bird down
         birdYPos += 3;
 
 
-        // Check if spacebar is pressed to move bird up
+// Check if spacebar is pressed to move bird up
         if (keyIsDown(32)) { // 32 is the keycode for the spacebar
             birdYPos -= 9; // Move the bird up by 9 units
         }
 
-        // Check if pipes are off screen to respawn at other side 
+// Check if pipes are off screen to respawn at other side 
         if (pipeT1XPos <= -50) {
             pipeT1XPos = 650;
         }
@@ -135,19 +133,21 @@ function draw() {
             pipeB4XPos = 650;
         }
 
-        // Check for collisions
+
+// Check for collisions
         if (checkCollision()) {
             gameRunning = false;
         }
 
+
     } else {
-        // Game over
         background(0);
         fill(random(255), random(255), random(255));
         textSize(50);
         textAlign(CENTER, CENTER);
         text("GAME OVER", width / 2, height / 2);
     }
+
 }
 
 
